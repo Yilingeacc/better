@@ -1,5 +1,4 @@
 import argparse
-
 import torch.optim
 import torch.nn as nn
 import torch.nn.functional as F
@@ -48,10 +47,10 @@ def train(config: Config, model: Model, dataset: Dataset):
         if config.dat_loss:
             dat_loss = mse(batch_group_embs, batch_item_dat_embs) + mse(batch_group_dat_embs, batch_pos_embs)
             loss += dat_loss * config.dat_loss_coefficient
-        if config.clr_loss is not 'none':
-            if config.clr_loss is 'mse':
+        if config.clr_loss != 'none':
+            if config.clr_loss == 'mse':
                 clr_loss = mse(pos_only_id, pos_only_tag) + mse(neg_only_id, neg_only_tag)
-            elif config.clr_loss is 'ce':
+            elif config.clr_loss == 'ce':
                 pos_loss = info_nce_loss(pos_only_id, pos_only_tag, pos_label, config.clr_temp)
                 neg_loss = info_nce_loss(neg_only_tag, neg_only_tag, neg_label, config.clr_temp)
                 clr_loss = (pos_loss + neg_loss) / 2
@@ -86,5 +85,5 @@ if __name__ == '__main__':
     dataset = Dataset(config=config, rating_matrix=rating_matrix_train)
     evaluator = Evaluator(config=config, rating_matrix_pred=dataset.rating_matrix_pred,
                           rating_matrix=rating_matrix_train, group2members_dict=data_loader.group2members_dict)
-    model = Model(config=config, group2members=data_loader.group2members_dict)
+    model = Model(config=config, group2members=data_loader.group2members_dict, rating_matrix=rating_matrix_train)
     train(config=config, model=model, dataset=dataset)

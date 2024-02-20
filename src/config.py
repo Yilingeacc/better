@@ -26,8 +26,8 @@ class Config:
 
         # neural network parameters
         self.embedding_size = 32
-        self.user_tower_input_size = self.user_tower_hidden_size = self.embedding_size * 2
-        self.item_tower_input_size = self.item_tower_hidden_size = self.embedding_size * 3
+        self.user_tower_input_size = self.embedding_size * (self.history_length + 2)
+        self.item_tower_input_size = self.hidden_size = self.embedding_size * 3
         self.nhead = 2
 
         # Environment
@@ -52,7 +52,7 @@ class Config:
         self.clr_temp = 0.1
 
         # Eval
-        self.eval_per_iter = 10
+        self.eval_per_iter = 1
         self.save_per_iter = 100
         self.eval_positive_threshold = 0.06
 

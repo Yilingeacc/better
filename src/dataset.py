@@ -66,9 +66,6 @@ class Dataset:
                     if positive_score - negative_score > config.threshold:
                         pairwise_training_set.append([user_id, pos, neg])
 
-            with open(config.dataset_file, 'w') as f:
-                for u, i, j in pairwise_training_set:
-                    f.write(f'{u} {i} {j}\n')
         return np.array(pairwise_training_set)
 
     def sample(self, batch_size):
